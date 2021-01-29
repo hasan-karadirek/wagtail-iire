@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+{% block formsandbuttons %}
+  
+{% endblock formsandbuttons %}
+
+<div class="spinner-wrapper">
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+</div>
+<!-- end of preloader -->
+
+
+
+
+
+<!-- Header -->
+<header id="header" class="ex-header roomsimg" style="background-image:url({{services.getImgUrl}}) ;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Checkout </h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<!-- end of header -->
+<div class="container">
+
+<ul>
+    <li>Name:{{form.name}}</li>
+    <li>phone:{{form.phone}}</li>
+    <li>email:{{form.email}}</li>
+    <li>date:{{form.date}}</li>
+    <li>price:{{form.price}}</li>
+    <li><button >continue to payment</button></li>
+</ul>
+<a href="/workspacepayment/mollie/{{form.id}}"><button>Pay</button></a>
+
+</div>
+{% endblock content %}

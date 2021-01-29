@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% block content %}
+  
+{% image self.pageImage scale-100 as img %}
+<!-- Header -->
+<header id="header" class="ex-header roomsimg" style="background-image:url({{img.url }}) ;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>{{self.title}}</h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<!-- end of header -->
+
+
+
+    <div class="container mt-4">
+        
+            
+            <h2>{{self.contentTitle}}</h2>
+         <p>{{self.contentText}}</p>   
+            
+        </div>
+<!-- Team -->
+<div class="basic-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="txt-center">{{self.ourTeamTitle}}</h2>
+                <p class="p-heading">{{self.ourTeamText}}</p>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+        <div class="row">
+            <div class="col-lg-12">
+                {% for member in self.ourTeam %}
+                  
+                {% image member.image scale-100 as img %}
+                <!-- Team Member -->
+                <div class="team-member">
+                    <div class="image-wrapper">
+                        <img class="img-fluid" src="{{img.url}}" alt="{{img.alt}}">
+                    </div> <!-- end of image-wrapper -->
+                    <p class="p-large">{{member.name}}</p>
+                    <p class="job-title">{{member.position}}</p>
+                    
+                </div> <!-- end of team-member -->
+                <!-- end of team member -->
+                {% endfor %}
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of basic-2 -->
+<!-- end of team -->
+{% endblock content %}

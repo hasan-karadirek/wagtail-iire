@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% block content %}
+  
+
+<!-- Preloader -->
+<div class="spinner-wrapper">
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+</div>
+<!-- end of preloader -->
+{% image self.pageImage scale-100 as img %}
+<!-- Header -->
+<header id="header" class="ex-header roomsimg" style="background-image:url({{img.url }}) ;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>{{self.title}}</h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<!-- end of header -->
+
+<div class="wrap">
+
+<div class="container dis-flex">
+    <div class="inner-cont1">
+        
+        {{self.pageText}}
+        <a href="#facilities" class="fac-link">Go to facilities.</a>
+    </div>
+    <!-- testimonails  -->
+    
+    <div class="inner-cont2">
+        
+        <!-- Card Slider -->
+        <div class="slider-container">
+            <div class="swiper-container details-card-slider">
+                <div class="swiper-wrapper">
+                    
+                    <!-- Slide -->
+                    {% for review in self.reviews  %}
+                    <div class="swiper-slide">
+                        <div class="card">
+                            
+                            <div class="card-body">
+                                <div class="testimonial-text">{{review.comment}}</div>
+                                <div class="testimonial-author">{{review.name}}-{{review.company}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                     <!-- end of swiper-slide -->
+                    <!-- end of slide -->
+
+                    
+                </div> <!-- end of swiper-wrapper -->
+
+                
+
+            </div> <!-- end of swiper-container -->
+    </div> <!-- end of progress-container -->
+<!-- end of progress bars -->
+    
+</div> <!-- end of tab-pane --> 
+<!-- end of tab -->
+
+</div>
+</div>
+
+{% for tab in self.service.getTabs  %}
+{% image tab.image scale-100 as img %}
+{% if forloop.counter == 2 %}
+<div class="container-outer">
+<div class="container dis-flex">
+<div class="row">
+    <div class="tabImg"><img src="{{img.url }}" alt="{{img.alt}}"></div>
+<div class="tabContent">
+    <h2>{{tab.title}}</h2>
+    {{tab.detailText}}
+
+</div>
+
+</div>
+</div>
+</div>
+{% else %}
+<div class="container-outer">
+<div class="container dis-flex">
+<div class="row">
+    
+<div class="tabContent">
+    <h2>{{tab.title}}</h2>
+    {{tab.detailText}}
+
+</div>
+<div class="tabImg"><img src="{{img.url}}" alt="{{img.alt}}"></div>
+</div>
+</div>
+</div>
+{% endif %}
+{% endfor %}
+{% for block in page.content %}
+       {% include_block block %}
+         
+{% endfor %}
+{% endblock content %}

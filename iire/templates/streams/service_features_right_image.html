@@ -1,0 +1,54 @@
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+    <!-- Details 2 -->
+	<div class="tabs">
+        <div class="area-1">
+            <div class="container h-100">
+            
+            
+            <h2 class="text-center">{{self.service.title}}</h2>
+            {{self.service.text}}
+            
+            <a href="{% slugurl self.service.slug %}" class="fac-link float-right">Details</a>
+            
+            <div class="tabs-container">
+                <!-- Tabs Links -->
+                <ul class="nav nav-tabs " id="ariaTabs" role="tablist">
+                    {% for tab in self.service.getTabs  %}
+                    {% image tab.image scale-100 as img %}
+                    {% if forloop.counter == 1 %}
+                    <li class="nav-item">
+                        <a class="nav-link active" id="nav-tab-{{tab.id}}" onclick="RoomImg('{{img.url}}')" data-toggle="tab" href="#tab{{tab.id}}" role="tab" aria-controls="tab-{{tab.id}}" aria-selected="true"><i class="fas fa-th"></i> {{tab.title}} </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-{{tab.id}}"  onclick="RoomImg('{{img.url}}')" data-toggle="tab" href="#tab{{tab.id}}" role="tab" aria-controls="tab-{{tab.id}}" aria-selected="false"><i class="fas fa-th"></i> {{tab.title}} </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}                    
+                </ul>
+                <!-- end of tabs links -->
+                <!-- Tabs Content -->
+                <div class="tab-content" id="ariaTabsContent">
+                    {% for tab in self.service.getTabs  %}
+                    
+                    <div class="tab-pane fade {% if forloop.counter == 1 %}show active{% endif %}" id="tab-{{tab.id}}" role="tabpanel" aria-labelledby="tab-{{tab.id}}">
+                        <p>{{tab.text}}</p>
+                    </div>
+                    
+                    {% endfor %} 
+                </div> <!-- end of tab-content -->
+                <!-- end of tabs content -->
+            </div> <!-- end of tabs-container -->
+        </div><!--end of container-->
+        </div>{% for tab in self.service.getTabs %}{% if forloop.counter == 1 %}{% image tab.image scale-100 as img %}<!-- end of area-1 on same line and no space between comments to eliminate margin white space --><div class="area-2"><img id="s1area2" class="w-100 h-100" src='{{img.url}}'  alt=""></div> <!-- end of area-2 -->
+          
+        {% endif %}
+          
+        {% endfor %}
+
+    </div> <!-- end of tabs -->
+    <!-- end of details 2 -->
+    
+    
+    

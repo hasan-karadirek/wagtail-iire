@@ -1,0 +1,300 @@
+{% load static wagtailuserbar menus_tags %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% get_menu "main" as menu %}
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+                {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+                {% with self.get_site.site_name as site_name %}
+                    {% if site_name %}- {{ site_name }}{% endif %}
+                {% endwith %}
+            {% endblock %}
+        </title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Global stylesheets #}
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:500,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fontawesome-all.css' %}"  rel="stylesheet">
+    <link href="{% static 'css/swiper.css' %}" rel="stylesheet">
+	<link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+
+        {% block extra_css %}
+            {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+    </head>
+
+    <body data-spy="scroll" data-target=".fixed-top" class="{% block body_class %}{% endblock %}">
+        {% wagtailuserbar %}
+
+    <!-- Preloader -->
+	<div class="spinner-wrapper">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+    <!-- end of preloader -->
+    
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
+        <!-- Text Logo - Use this if you don't have a graphic logo -->
+        <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Aria</a> -->
+
+        <!-- Image Logo -->
+        {% image settings.home.GeneralSettings.site_logo scale-100 as img %}
+        <a class="navbar-brand logo-image" href="{% slugurl 'home' %}"><img src="{{ img.url }}" alt="alternative"></a>
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-awesome fas fa-bars"></span>
+            <span class="navbar-toggler-awesome fas fa-times"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+                {% for item in menu.menu_itemss.all %}
+                {% if item.submenu %}
+                <li><div class="dropdown show">
+                    <a class="btn btn-secondary dropdown-toggle" href="{{item.link}}" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      {{item.title}}
+                    </a>
+                  
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {% for subitem in item.submenu.menu_itemss.all %}
+                        <a class="dropdown-item" href="{{subitem.link}}">{{subitem.title}}</a>                          
+                        {% endfor %}
+
+
+                    </div>
+                  </div>
+                </li>
+                {% else %}
+                  
+                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="{{item.link}}">{{item.title}}</a>
+                </li>
+                {% endif %}
+                  
+                {% endfor %}
+            </ul>
+           
+        </div>
+    </nav> <!-- end of navbar -->
+    <!-- end of navbar -->
+    {% block formsandbuttons %}
+  <!--Bid Form Start-->
+    <div id="bid-form" class='hide-form overlay-workspace'>
+        <div class="option-buttons-box">
+            <h3>Which service are you interested in?</h3>
+            <div class="option-buttons mx-auto">
+            <button onclick="serviceBidForm('meeting')">Meeting Rooms</button><br><br>
+            <button onclick="serviceBidForm('accommodation')">Accommadation</button>
+        </div>
+        </div>
+        <div id="meetingForm" class="bid-form bid-form-block  form-block hide-form">
+            
+        <form  method="POST" action="/formpost/">
+            <h3>Get Offer for Meeting Rooms</h3>
+            <p>description description description</p>
+            {% csrf_token %}
+            {{self.meetingForm.as_p}} 
+            <input type="hidden" value="meeting" name="id">
+            <button type="submit" class="btn btn-info mb-3">
+                Submit
+            </button>  
+        </form>
+    </div>
+    <div id="accommodationForm" class="bid-form bid-form-block  form-block hide-form">
+        <form method="POST" action="/formpost/">
+            <h3>Get Offer for Accommadation</h3>
+            <p>description description description</p>
+            {% csrf_token %}
+            {{self.accommodationForm.as_p}} 
+            <input type="hidden" value="accommodation" name="id">
+            <button type="submit" class="btn btn-info mb-3">
+                Submit
+            </button>  
+        </form>
+    </div>
+</div>
+<!--Bid FOrm Finish-->
+<!--Workspace Form Start-->
+    <div id="workspace-form" class="overlay-workspace hide-form">
+      
+    <div class="workspace-form  form-block ">
+        <form method="POST" class="workspace-form-inner" action="/formpost/">
+            <button class="close-btn">Close <span>x</span></button>
+        <div class='form-header'><h3>{{wsFormHeader.name}}</h3><p>{{wsFormHeader.description}}</p></div>
+
+
+        {% csrf_token %}
+          {{ self.workspaceForm.as_p }}
+          <input type="hidden" value="workspace" name="id">
+          <div>Price: {{wsFormHeader.price}}</div>
+        <input class="workspaceForm" type="submit" value="Submit">
+      </form>
+      
+    </div>
+    
+</div>
+<!--WOrkspaceForm finish-->
+
+<!--Action Buttons Start-->
+<!--Bid Button Start-->
+<div class="bid-btn">
+    <button onclick="bidForm()">teklif al</button>
+</div>
+
+<!--Bid Button Finish-->
+<!--AWorkspace Button Start-->
+<div class="workspace-btn">
+    <button  onclick="workspaceForm()">workspace</button>
+</div>
+<!--Workspace Button FInish-->
+      <!--Action Buttons Finish-->
+    {% endblock formsandbuttons %}
+        {% block content %}{% endblock %}
+        {% get_menu "footer" as footermenu %}
+      <!-- Footer -->
+      <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="text-container about">
+                        <h4>Few Words About Aria</h4>
+                        <p class="white">We're passionate about delivering the best business growth services for companies just starting out as startups or industry players that have established their market position a long tima ago.</p>
+                    </div> <!-- end of text-container -->
+                </div> <!-- end of col -->
+                {% for item in footermenu.menu_itemss.all %}
+                <div class="col-md-2">
+                    <div class="text-container">
+                        <h4>{{item.link_title}}</h4>
+                        {% if item.submenu %}
+                        <ul class="list-unstyled li-space-lg white">
+                            {% for submenu in item.submenu.menu_itemss.all %}
+                            <li>
+                                <a class="white" href="{{submenu.link_url}}">{{submenu.link_title}}</a>
+                            </li>
+                            {% endfor %}
+                            
+                        </ul>
+                        </div>
+                    </div>
+                        {% endif %}                  
+                {% endfor %}
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of footer -->  
+    <!-- end of footer -->
+
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="p-small"><a href="https://justaclick.com">Copyright 2020 JustAClick</a> All Rights Reserved</p>
+                </div> <!-- end of col -->
+            </div> <!-- enf of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of copyright --> 
+    <!-- end of copyright -->
+
+        {# Global javascript #}
+        <script src="{% static 'js/popper.min.js' %}"></script> <!-- Popper tooltip library for Bootstrap -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script> <!-- Bootstrap framework -->
+    <script src="{% static 'js/jquery.easing.min.js' %}"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="{% static 'js/swiper.min.js' %}"></script> <!-- Swiper for image and text sliders -->
+    <script src="{% static 'js/jquery.magnific-popup.js' %}"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="{% static 'js/morphext.min.js' %}"></script> <!-- Morphtext rotating text in the header -->
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script> <!-- Isotope for filter -->
+    <script src="{% static 'js/validator.min.js' %}"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="{% static 'js/scripts.js' %}"></script> <!-- Custom scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="text/javascript">
+        function RoomImg(id){
+            var img=document.getElementById("s1area2");
+            source=id;
+            img.src=source;
+           
+        }
+        function bidForm(){
+            div=document.getElementById("bid-form");
+            if(div.classList.contains("hide-form")){
+                div.classList.remove("hide-form");
+            }else{
+                div.classList.add("hide-form");
+            }
+
+        }
+        function workspaceForm(){
+            div=document.getElementById("workspace-form");
+            if(div.classList.contains("hide-form")){
+                div.classList.remove("hide-form");
+            }else{
+                div.classList.add("hide-form");
+            }
+
+        }
+        function serviceBidForm(formname){
+            mb=document.getElementsByClassName('option-buttons-box')
+            mb[0].classList.add("hide-buttons")
+            if (formname=="meeting"){
+                console.log("meeting")
+                form=document.getElementById("meetingForm")
+                if(form.classList.contains("hide-form")){
+                    console.log("contain")
+                    form.classList.remove("hide-form");
+                }else{
+                    console.log("nocontain")
+                    form.classList.add("hide-form");
+                }
+
+
+            }else{
+                console.log("maccc")
+                form=document.getElementById("accommodationForm")
+                if(form.classList.contains("hide-form")){
+                    form.classList.remove("hide-form");
+                }else{
+                    form.classList.add("hide-form");
+                }
+            }
+        }
+        function pay(formData){
+            
+           
+        }
+    </script>
+        {% block extra_js %}
+            {# Override this in templates to add extra javascript #}
+        {% endblock %}
+    </body>
+</html>

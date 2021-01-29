@@ -1,0 +1,48 @@
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+<!-- Details 1 -->
+<div id="details" class="accordion">
+    <div class="area-1">
+        <div id="carouselExampleIndicators" class="carousel slide w-100 h-100" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner h-100">
+                {% for tab in self.service.getTabs  %}
+                {% image tab.image scale-100 as img %}
+                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} img-container">
+                    <img src='{{img.url }}' class="w-100 h-100" alt="{{img.alt}}">
+                  </div>
+                
+                
+                {% endfor %}
+              
+              
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+    </div><!-- end of area-1 on same line and no space between comments to eliminate margin white space --><div class="area-2">
+        <div class="container">
+        
+        <h2>{{self.service.title}}</h2>
+        {{self.service.text}}
+        
+         <a href="{% slugurl self.service.slug %}" class="fac-link float-right">Details</a>
+         
+         
+         
+        
+
+        </div>
+    </div> <!-- end of area-2 -->
+</div> <!-- end of accordion -->
+<!-- end of details 1 -->
