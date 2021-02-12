@@ -5,7 +5,8 @@ from .forms import ReviewForm,MeetingOfferForm,AccommodationOfferForm,ContactFor
 def formpost(request):
     if request.method=="POST" and request.POST["id"]:
         if request.POST["id"]=="review":
-            form=ReviewForm(request.POST)
+            form=ReviewForm(request.POST,request.FILES)
+            
             s=form.save()
             return redirect("/")
         if request.POST["id"]=="meeting":

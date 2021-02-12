@@ -10,8 +10,8 @@ from django.utils.text import slugify
 from streams.blocks import RichTextBlock
 from wagtail.core.fields import StreamField
 from appforms.models import Reviews
-from appforms.forms import MeetingOfferForm,AccommodationOfferForm,WorkspaceForm
-
+from appforms.forms import MeetingOfferForm,AccommodationOfferForm,WorkspaceForm 
+from wagtail.core.fields import RichTextField
 
 
 def get_unique_slug(self):
@@ -28,7 +28,7 @@ def get_unique_slug(self):
 class Services(ClusterableModel):
     
     title=models.CharField(max_length=100,null=False,blank=False)
-    text=models.TextField(null=False,blank=False)
+    text=RichTextField()
     slug=models.CharField(max_length=250)
     panels = [
         FieldPanel('title'),
@@ -50,8 +50,8 @@ class Services(ClusterableModel):
 class Tabs(Orderable):
     page = ParentalKey("services.Services", related_name="service_tabs")
     title=models.CharField(max_length=50,null=True,blank=True)
-    text=models.TextField(max_length=150,null=True,blank=True)
-    detailText=models.TextField(max_length=300,null=True,blank=True)
+    text=RichTextField()
+    detailText=RichTextField()
     image=models.ForeignKey(
         "wagtailimages.Image", 
         null=True,
@@ -79,7 +79,7 @@ class ServiceDetail(Page):
         blank=False,
         on_delete=models.SET_NULL,
     )
-    pageText=models.TextField(max_length=300)
+    pageText=RichTextField()
     service=models.ForeignKey("services.Services", verbose_name=("verb"), on_delete=models.PROTECT)
     content=StreamField([
         ("content", RichTextBlock()),

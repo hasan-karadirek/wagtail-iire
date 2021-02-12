@@ -21,7 +21,7 @@
         
             
             <h2>{{self.contentTitle}}</h2>
-         <p>{{self.contentText}}</p>   
+         <p>{{self.contentText|safe}}</p>   
             
         </div>
 <!-- Team -->
@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h2 class="txt-center">{{self.ourTeamTitle}}</h2>
-                <p class="p-heading">{{self.ourTeamText}}</p>
+                <p class="p-heading">{{self.ourTeamText|safe}}</p>
             </div> <!-- end of col -->
         </div> <!-- end of row -->
         <div class="row">

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Reviews,OfferRequests,ContactRequest,WorkspaceRequest
 from .widgets import BootstrapDateTimePickerInput
+from wagtail.images.models import Image
 
 class ReviewForm(forms.ModelForm):
     name=forms.CharField(max_length=70, required=True,label="Your Name",widget=forms.TextInput(attrs={"cols":4,"class":"form-control-input"}))
@@ -9,14 +10,23 @@ class ReviewForm(forms.ModelForm):
     image=forms.ImageField(required=False,widget=forms.FileInput(attrs={"class":"form-control-file"}))
     class Meta:
         model = Reviews
-        fields = ['name', 'company','comment', 'image']
+        fields = ['name', 'company','comment']
+    def save(self, commit=False):
+        instance = super(ReviewForm, self).save(commit=False)
+        avatar_image = Image.objects.create(
+            file=self.cleaned_data['image'],
+            title=self.cleaned_data['image'],   
+        )
+        instance.avatar_image = avatar_image
+        instance.save()
+        return instance
 
 class MeetingOfferForm(forms.ModelForm):
     services=forms.CharField( max_length=50, required=True,label="Your Name", widget=forms.TextInput(attrs={'type':'hidden','value':'Meeting Room'}))
     name=forms.CharField( max_length=50, required=True,label="Your Name", widget=forms.TextInput(attrs={}))
     email=forms.EmailField(required=True,label="Email",widget=forms.TextInput(attrs={}))
     phone=forms.CharField(max_length=15,  required=True,label="Phone Number",widget=forms.TextInput(attrs={}))
-    message=forms.CharField(required=True,label="Anything you would like to add or ask?", widget=forms.Textarea(attrs={'cols':30, 'rows': 4, }))
+    message=forms.CharField(required=True,label="Anything you would like to add or ask?", widget=forms.Textarea(attrs={'cols':40, 'rows': 4, }))
     class Meta:
         model = OfferRequests
         fields = [ 'services','name','email', 'phone', 'message']
@@ -25,7 +35,7 @@ class AccommodationOfferForm(forms.ModelForm):
     name=forms.CharField( max_length=50, required=True,label="Your Name", widget=forms.TextInput(attrs={}))
     email=forms.EmailField(required=True,label="Email",widget=forms.TextInput(attrs={}))
     phone=forms.CharField(max_length=15,  required=True,label="Phone Number",widget=forms.TextInput(attrs={}))
-    message=forms.CharField(required=True,label="Anything you would like to add or ask?", widget=forms.Textarea(attrs={'cols':30, 'rows': 4, }))
+    message=forms.CharField(required=True,label="Anything you would like to add or ask?", widget=forms.Textarea(attrs={'cols':40, 'rows': 4, }))
     class Meta:
         model = OfferRequests
         fields = [ 'services','name','email', 'phone', 'message']

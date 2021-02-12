@@ -7,12 +7,13 @@ from streams import blocks
 from appforms.models import Reviews
 from appforms.forms import ReviewForm,MeetingOfferForm,AccommodationOfferForm,ContactForm,WorkspaceForm
 from wagtail.contrib.settings.models import BaseSetting,register_setting
+from wagtail.core.fields import RichTextField
 
 
 class Slider(Orderable):
     page = ParentalKey("home.homePage", related_name="slider_images")
     title=models.CharField(max_length=150,null=True,blank=True)
-    text=models.TextField(null=True,blank=True)
+    text=RichTextField()
     image=models.ForeignKey(
         "wagtailimages.Image", 
         null=True,
@@ -43,7 +44,7 @@ class HomePage(Page):
     templates="home/homepage.html"
 
     introTitle=models.CharField(max_length=100,null=True,blank=True)
-    introText=models.TextField(max_length=300, null=True,blank=True)
+    introText=RichTextField()
     reviews=Reviews.objects.filter(approved=True)
     reviewForm=ReviewForm()
     workspaceForm=WorkspaceForm()
@@ -81,7 +82,7 @@ class RoutePage(Page):
         on_delete=models.SET_NULL,
     )
     contentTitle=models.CharField(max_length=100)
-    contentText=models.TextField(max_length=300)
+    contentText=RichTextField()
     mapEmbed=models.TextField()
     
 
@@ -105,9 +106,9 @@ class AboutUsPage(Page):
         on_delete=models.SET_NULL,
     )
     contentTitle=models.CharField(max_length=100)
-    contentText=models.TextField()
+    contentText=RichTextField()
     ourTeamTitle=models.CharField(max_length=100)
-    ourTeamText=models.TextField()
+    ourTeamText=RichTextField()
     ourTeam=OurTeam.objects.all()
     
     content_panels=Page.content_panels+[
@@ -128,10 +129,26 @@ class GeneralSettings(BaseSetting):
     address=models.CharField(max_length=500)
     phone=models.CharField(max_length=20)
     email=models.CharField(max_length=100)
+    wsFormHeader=models.CharField(max_length=100)
+    wsFormText=models.TextField(max_length=400)
+    mrFormHeader=models.CharField(max_length=100)
+    mrFormText=models.TextField(max_length=400)
+    acFormHeader=models.CharField(max_length=100)
+    acFormText=models.TextField(max_length=400)
 
     panels=[
         ImageChooserPanel("site_logo"),
         FieldPanel("address"),
         FieldPanel("phone"),
         FieldPanel("email"),
+        MultiFieldPanel(
+            [
+        FieldPanel("wsFormHeader"),
+        FieldPanel("wsFormText"),
+        FieldPanel("mrFormHeader"),
+        FieldPanel("mrFormText"),
+        FieldPanel("acFormHeader"),
+        FieldPanel("acFormText"),
+        ],
+         heading="Form Texts"),
     ]

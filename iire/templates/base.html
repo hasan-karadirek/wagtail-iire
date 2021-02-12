@@ -81,19 +81,18 @@
             <ul class="navbar-nav ml-auto">
                 {% for item in menu.menu_itemss.all %}
                 {% if item.submenu %}
-                <li><div class="dropdown show">
-                    <a class="btn btn-secondary dropdown-toggle" href="{{item.link}}" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <li class="nav-item services-item">
+                    <a class="nav-link page-scroll" href="{{item.link}}" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       {{item.title}}
                     </a>
                   
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <div class="dropdown-sub-menu" aria-labelledby="dropdownMenuLink">
                         {% for subitem in item.submenu.menu_itemss.all %}
-                        <a class="dropdown-item" href="{{subitem.link}}">{{subitem.title}}</a>                          
+                        <a class="a-sub-item" href="{{subitem.link}}">{{subitem.title}}</a>                          
                         {% endfor %}
 
 
                     </div>
-                  </div>
                 </li>
                 {% else %}
                   
@@ -112,7 +111,7 @@
   <!--Bid Form Start-->
     <div id="bid-form" class='hide-form overlay-workspace'>
         <div class="option-buttons-box">
-            <h3>Which service are you interested in?</h3>
+            <h3>Which service are you interested in?</h3> <span class="buttonsClose" id="buttonsClose">X</span>
             <div class="option-buttons mx-auto">
             <button onclick="serviceBidForm('meeting')">Meeting Rooms</button><br><br>
             <button onclick="serviceBidForm('accommodation')">Accommadation</button>
@@ -121,8 +120,9 @@
         <div id="meetingForm" class="bid-form bid-form-block  form-block hide-form">
             
         <form  method="POST" action="/formpost/">
-            <h3>Get Offer for Meeting Rooms</h3>
-            <p>description description description</p>
+            <button id="meetingClose" class="close-btn"><span>x</span></button>
+            <h3>{{settings.home.GeneralSettings.mrFormHeader}}</h3>
+            <p>{{settings.home.GeneralSettings.mrFormText}}</p>
             {% csrf_token %}
             {{self.meetingForm.as_p}} 
             <input type="hidden" value="meeting" name="id">
@@ -133,8 +133,9 @@
     </div>
     <div id="accommodationForm" class="bid-form bid-form-block  form-block hide-form">
         <form method="POST" action="/formpost/">
-            <h3>Get Offer for Accommadation</h3>
-            <p>description description description</p>
+            <button id="accommodationClose" class="close-btn"><span>x</span></button>
+            <h3>{{settings.home.GeneralSettings.acFormHeader}}</h3>
+            <p>{{settings.home.GeneralSettings.acFormText}}</p>
             {% csrf_token %}
             {{self.accommodationForm.as_p}} 
             <input type="hidden" value="accommodation" name="id">
@@ -150,14 +151,15 @@
       
     <div class="workspace-form  form-block ">
         <form method="POST" class="workspace-form-inner" action="/formpost/">
-            <button class="close-btn">Close <span>x</span></button>
-        <div class='form-header'><h3>{{wsFormHeader.name}}</h3><p>{{wsFormHeader.description}}</p></div>
+        
+            <button id="workspaceClose" class="close-btn"><span>x</span></button>
+        <div class='form-header'><h3>{{settings.home.GeneralSettings.wsFormHeader}}</h3><p>{{settings.home.GeneralSettings.wsFormText}}</p></div>
 
 
         {% csrf_token %}
           {{ self.workspaceForm.as_p }}
           <input type="hidden" value="workspace" name="id">
-          <div>Price: {{wsFormHeader.price}}</div>
+          <p><label>Price:</label> <input type="number" value="10" readonly></p>
         <input class="workspaceForm" type="submit" value="Submit">
       </form>
       
@@ -165,19 +167,25 @@
     
 </div>
 <!--WOrkspaceForm finish-->
-
-<!--Action Buttons Start-->
-<!--Bid Button Start-->
-<div class="bid-btn">
-    <button onclick="bidForm()">teklif al</button>
+<div class="home-btn-wrapper-outer">
+    <div class="home-btn-wrapper-inner">
+        <!--Action Buttons Start-->
+        <!--Bid Button Start-->
+        <div class="bid-btn">
+            <button onclick="bidForm()">Get Offer</button>
+        </div>
+        
+        <!--Bid Button Finish-->
+        <!--AWorkspace Button Start-->
+        <div class="workspace-btn">
+            <button  onclick="workspaceForm()">Rent Workspace</button>
+        </div>
+        <!--Workspace Button FInish-->
+        </div>
 </div>
 
-<!--Bid Button Finish-->
-<!--AWorkspace Button Start-->
-<div class="workspace-btn">
-    <button  onclick="workspaceForm()">workspace</button>
-</div>
-<!--Workspace Button FInish-->
+
+
       <!--Action Buttons Finish-->
     {% endblock formsandbuttons %}
         {% block content %}{% endblock %}
@@ -188,8 +196,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="text-container about">
-                        <h4>Few Words About Aria</h4>
-                        <p class="white">We're passionate about delivering the best business growth services for companies just starting out as startups or industry players that have established their market position a long tima ago.</p>
+                        <a class="navbar-brand logo-image" href="{% slugurl 'home' %}"><img src="{{ img.url }}" alt="alternative"></a>
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
                 {% for item in footermenu.menu_itemss.all %}
@@ -238,13 +245,37 @@
     <script src="{% static 'js/validator.min.js' %}"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="{% static 'js/scripts.js' %}"></script> <!-- Custom scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{% static 'js/iire.js' %}"></script>
     <script type="text/javascript">
-        function RoomImg(id){
-            var img=document.getElementById("s1area2");
-            source=id;
+        function RoomImg(url, id, service ){
+            var img=document.querySelector(`.hp-image.${service}`);
+            const tabContent = document.querySelectorAll(`.hp-tab-pane.${service}`)
+            const anchorTag = document.getElementById(`nav-tab-${id}`)
+
+            console.log(tabContent)
+            console.log(service)
+            tabContent.forEach(content => {
+                if(content.id == `tab-${id}`){
+                    content.classList.add('show')
+                    content.classList.add('active')
+                    anchorTag.classList.add('active')
+                    content.classList.remove('hp-none')
+                }else{
+                    content.classList.remove('show')
+                    content.classList.remove('active')
+                    anchorTag.classList.remove('active')
+                    content.classList.add('hp-none')
+                    
+                }
+            })
+
+            source=url;
             img.src=source;
            
         }
+        
+
+
         function bidForm(){
             div=document.getElementById("bid-form");
             if(div.classList.contains("hide-form")){
@@ -292,6 +323,38 @@
             
            
         }
+        closeButton=document.querySelectorAll('.close-btn')
+        closeButton.forEach(btn => {
+            btn.addEventListener("click",function(){
+                mb=document.getElementsByClassName('option-buttons-box')
+                mb[0].classList.remove("hide-buttons")
+                if (btn.id=='workspaceClose'){
+                    const workspaceForm = document.getElementById("workspace-form");
+                    workspaceForm.classList.toggle('hide-form')
+                }else{
+                    if(this.id == "meetingClose"){
+                        const meetingForm=document.getElementById("meetingForm")
+                        meetingForm.classList.toggle('hide-form')
+                    }else{
+                        const accommodationForm=document.getElementById("accommodationForm")
+                        accommodationForm.classList.toggle('hide-form')
+
+                    }
+                    const bidForm = document.getElementById("bid-form");
+                    bidForm.classList.toggle('hide-form')
+                }
+            })
+        })
+
+        document.getElementById("buttonsClose").addEventListener('click', function(){
+            const bidForm = document.getElementById("bid-form");
+            bidForm.classList.toggle('hide-form')
+        })
+       
+         
+
+
+
     </script>
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}

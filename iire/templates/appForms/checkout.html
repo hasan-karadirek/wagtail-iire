@@ -28,17 +28,40 @@
     </div> <!-- end of container -->
 </header> <!-- end of ex-header -->
 <!-- end of header -->
+
+
+
 <div class="container">
 
-<ul>
-    <li>Name:{{form.name}}</li>
-    <li>phone:{{form.phone}}</li>
-    <li>email:{{form.email}}</li>
-    <li>date:{{form.date}}</li>
-    <li>price:{{form.price}}</li>
-    <li><button >continue to payment</button></li>
-</ul>
-<a href="/workspacepayment/mollie/{{form.id}}"><button>Pay</button></a>
+<div class="payment-card">
+  
+        <div class="payment-inner">
+            <li><strong>Name:</strong></li>
+            <li><strong>Phone:</strong></li>
+            <li><strong>Email:</strong></li>
+            <li><strong>Date:</strong></li>
+            <li><strong>Price:</strong></li>
+        </div>
+        <div class="payment-inner">
+            <li>
+                {{form.name}}
+            </li>
+            <li>
+                {{form.phone}}
+            </li>
+            <li>
+                {{form.email}}
+            </li>
+            <li>
+                {{form.date}}
+            </li>
+            <li>
+                {{form.price}}
+            </li>
+        </div>
+    
+</div>
+<a class="payButton" href="/workspacepayment/mollie/{{form.id}}"><button>Go to Payment</button></a>
 
 </div>
 {% endblock content %}

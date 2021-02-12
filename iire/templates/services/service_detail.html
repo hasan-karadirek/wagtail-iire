@@ -31,44 +31,10 @@
 <div class="container dis-flex">
     <div class="inner-cont1">
         
-        {{self.pageText}}
-        <a href="#facilities" class="fac-link">Go to facilities.</a>
-    </div>
-    <!-- testimonails  -->
-    
-    <div class="inner-cont2">
+        {{self.pageText|safe}}
         
-        <!-- Card Slider -->
-        <div class="slider-container">
-            <div class="swiper-container details-card-slider">
-                <div class="swiper-wrapper">
-                    
-                    <!-- Slide -->
-                    {% for review in self.reviews  %}
-                    <div class="swiper-slide">
-                        <div class="card">
-                            
-                            <div class="card-body">
-                                <div class="testimonial-text">{{review.comment}}</div>
-                                <div class="testimonial-author">{{review.name}}-{{review.company}}</div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                     <!-- end of swiper-slide -->
-                    <!-- end of slide -->
-
-                    
-                </div> <!-- end of swiper-wrapper -->
-
-                
-
-            </div> <!-- end of swiper-container -->
-    </div> <!-- end of progress-container -->
-<!-- end of progress bars -->
+    </div>
     
-</div> <!-- end of tab-pane --> 
-<!-- end of tab -->
 
 </div>
 </div>
@@ -78,11 +44,11 @@
 {% if forloop.counter == 2 %}
 <div class="container-outer">
 <div class="container dis-flex">
-<div class="row">
+<div class="row tab-cont-row">
     <div class="tabImg"><img src="{{img.url }}" alt="{{img.alt}}"></div>
 <div class="tabContent">
     <h2>{{tab.title}}</h2>
-    {{tab.detailText}}
+    {{tab.detailText|safe}}
 
 </div>
 
@@ -92,11 +58,11 @@
 {% else %}
 <div class="container-outer">
 <div class="container dis-flex">
-<div class="row">
+<div class="row tab-cont-row">
     
-<div class="tabContent">
+<div class="tabContent ">
     <h2>{{tab.title}}</h2>
-    {{tab.detailText}}
+    {{tab.detailText|safe}}
 
 </div>
 <div class="tabImg"><img src="{{img.url}}" alt="{{img.alt}}"></div>

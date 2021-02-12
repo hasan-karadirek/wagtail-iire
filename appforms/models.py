@@ -7,12 +7,18 @@ class Reviews(models.Model):
     name=models.CharField( max_length=70)
     company=models.CharField(max_length=50)
     comment=models.TextField(null=False,blank=False,max_length=250)
-    image=models.ImageField()
+    avatar_image=models.ForeignKey(
+        "wagtailimages.Image", 
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     approved=models.BooleanField(default=False)
     panels = [
         FieldPanel('name'),
         FieldPanel('company'),
         FieldPanel('comment'),
+        ImageChooserPanel('avatar_image'),
         FieldPanel('approved'),
     ]
 class OfferRequests(models.Model):
