@@ -68,7 +68,7 @@
 
         <!-- Image Logo -->
         {% image settings.home.GeneralSettings.site_logo scale-100 as img %}
-        <a class="navbar-brand logo-image" href="{% slugurl 'home' %}"><img src="{{ img.url }}" alt="alternative"></a>
+        <a class="navbar-brand logo-image" href="{% slugurl 'home' %}"><img style="width:100%; height:100%; " src="{{ img.url }}" alt="alternative"></a>
         
         <!-- Mobile Menu Toggle Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,7 +196,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="text-container about">
-                        <a class="navbar-brand logo-image" href="{% slugurl 'home' %}"><img src="{{ img.url }}" alt="alternative"></a>
+                        <a class="navbar-brand logo-image" href="{% slugurl 'home' %}"><img style="width:100%; height:100%; " src="{{ img.url }}" alt="alternative"></a>
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
                 {% for item in footermenu.menu_itemss.all %}

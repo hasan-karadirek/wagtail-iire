@@ -337,7 +337,6 @@ select {
 	-ms-appearance: none;
     -o-appearance: none;
     appearance: none;
-    background-image: url('../images/down-arrow.png');
     background-position: 96% 50%;
     background-repeat: no-repeat;
     outline: none;
@@ -669,6 +668,8 @@ input[type='checkbox'] {
 
 .navbar-custom .navbar-brand {
 	font-size: 0;
+	height: 70px;
+	width: 200px;
 }
 
 .navbar-custom .navbar-brand.logo-image img {
